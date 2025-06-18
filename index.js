@@ -102,8 +102,9 @@ app.get('/grafik', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'tabel.html'));
   });
   
-  
+  console.log("coba commit 2")
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
 });
+
