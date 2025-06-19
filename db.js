@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 //const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 require('dotenv').config();
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -11,13 +11,13 @@ const connection = mysql.createConnection({
 });
 
 
-connection.connect((err) => {
+db.connect((err) => {
   if (err) {
     console.error('❌ Gagal koneksi ke database:', err.message);
   } else {
-    console.log('✅ Terhubung ke database MySQL!');
+    console.log('✅ Terhubung ke database MySQL railway!');
   }
 });
 
-module.exports = connection;
+module.exports = db;
 
