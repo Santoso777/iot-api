@@ -1,27 +1,23 @@
 const mysql = require('mysql2');
+//const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 require('dotenv').config();
 
-// Gunakan pool agar koneksi bisa dikelola otomatis dan scalable
-const pool = mysql.createPool({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  waitForConnections: true,
-  connectionLimit: 10,     // Maksimal 10 koneksi aktif
-  queueLimit: 0            // Antrian tidak dibatasi
+  port: process.env.DB_PORT
 });
 
-// Tes koneksi (optional)
-pool.getConnection((err, connection) => {
+
+db.connect((err) => {
   if (err) {
     console.error('❌ Gagal koneksi ke database:', err.message);
   } else {
-    console.log('✅ Terhubung ke database MySQL Railway (via pool)!');
-    connection.release(); // penting: lepas koneksi kembali ke pool
+    console.log('✅ Terhubung ke database MySQL railway!');
   }
 });
 
-// Export pool untuk dipakai di file lain
-module.exports = pool;
+module.exports = db;
+
