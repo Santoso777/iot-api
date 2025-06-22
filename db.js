@@ -1,23 +1,50 @@
+// const mysql = require('mysql2');
+// //const { Connection } = require('mysql2/typings/mysql/lib/Connection');
+// require('dotenv').config();
+
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+//   port: process.env.DB_PORT
+// });
+
+
+// db.connect((err) => {
+//   if (err) {
+//     console.error('❌ Gagal koneksi ke database:', err.message);
+//   } else {
+//     console.log('✅ Terhubung ke database MySQL railway!');
+//   }
+// });
+
+// module.exports = db;
+
 const mysql = require('mysql2');
-//const { Connection } = require('mysql2/typings/mysql/lib/Connection');
 require('dotenv').config();
 
-const db = mysql.createConnection({
+// Gunakan pool agar koneksi bisa dikelola otomatis dan scalable
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  port: process.env.DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,     // Maksimal 10 koneksi aktif
+  queueLimit: 0            // Antrian tidak dibatasi
 });
 
-
-db.connect((err) => {
+// Tes koneksi (optional)
+pool.getConnection((err, connection) => {
   if (err) {
     console.error('❌ Gagal koneksi ke database:', err.message);
   } else {
-    console.log('✅ Terhubung ke database MySQL railway!');
+    console.log('✅ Terhubung ke database MySQL Railway (via pool)!');
+    connection.release(); // penting: lepas koneksi kembali ke pool
   }
 });
 
-module.exports = db;
-
+// Export pool untuk dipakai di file lain
+module.exports = pool;
