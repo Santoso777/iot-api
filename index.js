@@ -33,7 +33,7 @@ app.post('/login', (req, res) => {
   // Ganti sesuai kebutuhan
   if (username === 'admin' && password === '1234') {
     req.session.loggedIn = true;
-    res.redirect('/grafik.html');
+    res.redirect('/dashboard.html');
   } else {
     res.send('<script>alert("Login gagal!"); window.location.href="/login.html";</script>');
   }
@@ -47,6 +47,10 @@ app.get('/logout', (req, res) => {
 });
 
 //grafik setelah login
+app.get('/dashboard.html', isAuthenticated, (req, res) => {
+  res.sendFile(__dirname + '/public/dashboard.html');
+});
+
 app.get('/grafik.html', isAuthenticated, (req, res) => {
   res.sendFile(__dirname + '/public/grafik.html');
 });
@@ -102,7 +106,11 @@ app.get('/grafik', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'tabel.html'));
   });
   
-  
+    // Halaman dashboard
+    app.get('/dashboard', (req, res) => {
+      res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+    });
+    
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
