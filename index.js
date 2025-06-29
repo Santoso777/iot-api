@@ -71,7 +71,7 @@ app.post('/api/data', (req, res) => {
     return res.status(400).json({ message: '❌ Data tidak lengkap' });
   }
 
-  const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
+  const query = 'INSERT INTO sensor_data2 (temperature, humidity) VALUES (?, ?)';
   db.query(query, [temperature, humidity], (err, result) => {
     if (err) {
       console.error('❌ Gagal menyimpan data:', err.message);
@@ -88,7 +88,7 @@ app.post('/api/data', (req, res) => {
 //enpoint get
 
 app.get('/api/data', (req, res) => {
-    db.query('SELECT * FROM sensor_data ORDER BY created_at DESC LIMIT 20', (err, results) => {
+    db.query('SELECT * FROM sensor_data2 ORDER BY created_at DESC LIMIT 20', (err, results) => {
       if (err) {
         return res.status(500).json({ message: '❌ Error mengambil data' });
       }
