@@ -103,18 +103,19 @@ app.post('/api/data', (req, res) => {
   const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
 
   // Gunakan pool untuk query
-  db.query(query, [temperature, humidity], (err, result) => {
+  pool.query(query, [temperature, humidity], (err, result) => {
     if (err) {
       console.error('❌ Gagal menyimpan data:', err.message);
       return res.status(500).json({ message: '❌ Error pada database' });
     }
-  
+
     res.status(201).json({
       message: '✅ Data berhasil disimpan',
       id: result.insertId
     });
   });
-  
+});
+
 
 //enpoint get
 
@@ -147,4 +148,3 @@ app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
 });
 
-});
