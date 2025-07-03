@@ -63,16 +63,47 @@ app.get('/tabel.html', isAuthenticated, (req, res) => {
 // Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// // Endpoint POST dari ESP32
+// app.post('/api/data', (req, res) => {
+//   const { temperature, humidity } = req.body;
+
+//   if (temperature == null || humidity == null) {
+//     return res.status(400).json({ message: '❌ Data tidak lengkap' });
+//   }
+
+//   const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
+//   db.query(query, [temperature, humidity], (err, result) => {
+//     if (err) {
+//       console.error('❌ Gagal menyimpan data:', err.message);
+//       return res.status(500).json({ message: '❌ Error pada database' });
+//     }
+
+//     res.status(201).json({
+//       message: '✅ Data berhasil disimpan',
+//       id: result.insertId
+//     });
+//   });
+// });
+
+
 // Endpoint POST dari ESP32
 app.post('/api/data', (req, res) => {
   const { temperature, humidity } = req.body;
 
+  // Validasi input data
   if (temperature == null || humidity == null) {
     return res.status(400).json({ message: '❌ Data tidak lengkap' });
   }
 
+  // Validasi tipe data (optional, tergantung pada kebutuhan)
+  if (typeof temperature !== 'number' || typeof humidity !== 'number') {
+    return res.status(400).json({ message: '❌ Data harus berupa angka' });
+  }
+
   const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
-  db.query(query, [temperature, humidity], (err, result) => {
+
+  // Gunakan pool untuk query
+  pool.query(query, [temperature, humidity], (err, result) => {
     if (err) {
       console.error('❌ Gagal menyimpan data:', err.message);
       return res.status(500).json({ message: '❌ Error pada database' });
@@ -84,6 +115,7 @@ app.post('/api/data', (req, res) => {
     });
   });
 });
+
 
 //enpoint get
 
