@@ -1,6 +1,6 @@
-const mysql = require('mysql2');
-//const { Connection } = require('mysql2/typings/mysql/lib/Connection');
-require('dotenv').config();
+// const mysql = require('mysql2');
+// //const { Connection } = require('mysql2/typings/mysql/lib/Connection');
+// require('dotenv').config();
 
 // const db = mysql.createConnection({
 //   host: process.env.DB_HOST,
