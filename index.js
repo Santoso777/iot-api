@@ -95,10 +95,10 @@ app.post('/api/data', (req, res) => {
     return res.status(400).json({ message: '❌ Data tidak lengkap' });
   }
 
-  // Validasi tipe data (optional, tergantung pada kebutuhan)
-  if (typeof temperature !== 'number' || typeof humidity !== 'number') {
-    return res.status(400).json({ message: '❌ Data harus berupa angka' });
-  }
+  // // Validasi tipe data (optional, tergantung pada kebutuhan)
+  // if (typeof temperature !== 'number' || typeof humidity !== 'number') {
+  //   return res.status(400).json({ message: '❌ Data harus berupa angka' });
+  // }
 
   const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
 
