@@ -86,7 +86,7 @@ app.post('/api/data', (req, res) => {
 });
 
 
-// // Endpoint POST dari ESP32
+// // Endpoint POST dari ESP32/
 // app.post('/api/data', (req, res) => {
 //   const { temperature, humidity } = req.body;
 
