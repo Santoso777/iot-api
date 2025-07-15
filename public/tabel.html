@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabel Data Sensor</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 30px;
+      background-color: #e0f2f1;
+      margin: 0;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0d47a1;
+    }
+    .btn-warning {
+      background-color: yellow;
+    }
+    .btn-secondary {
+      background-color: #43a047;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #2e7d32;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #009688;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media print {
+      .btn-group {
+        display: none;
+      }
+      body {
+        background: white;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Tabel Data Sensor DHT11 (ESP32)</h2>
+
+  <div class="btn-group">
+    <button class="btn btn-secondary" onclick="window.print()">Cetak Tabel</button>
+    <button class="btn btn-primary" onclick="location.href='/grafik'">Lihat Grafik</button>
+    <button class="btn btn-warning" onclick="location.href='/dashboard'">Dashboard</button>
+
+  </div>
+
+  <table id="sensorTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Suhu (°C)</th>
+        <th>Kelembaban (%)</th>
+        <th>Waktu</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function ambilTabel() {
+      try {
+        const res = await fetch('/api/data');
+        if (!res.ok) throw new Error("Gagal ambil data tabel");
+        const data = await res.json();
+        const tbody = document.querySelector('#sensorTable tbody');
+        tbody.innerHTML = ''; // clear isi tabel
+
+        data.forEach(d => {
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td>${d.id}</td>
+            <td>${d.temperature}</td>
+            <td>${d.humidity}</td>
+            <td>${new Date(d.created_at).toLocaleString()}</td>
+          `;
+
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error("❌ Gagal ambil data:", err);
+      }
+    }
+
+    ambilTabel();
+    setInterval(ambilTabel, 10000);
+  </script>
+</body>
+</html>
