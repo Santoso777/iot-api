@@ -26,6 +26,11 @@ function isAuthenticated(req, res, next) {
 
 app.use(express.urlencoded({ extended: true }));
 
+// Redirect root ke login.html
+app.get('/', (req, res) => {
+  res.redirect('/login.html');
+});
+
 // Login POST
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -59,7 +64,6 @@ app.get('/tabel.html', isAuthenticated, (req, res) => {
   res.sendFile(__dirname + '/public/tabel.html');
 });
 
-
 // Serve static files (HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -85,66 +89,31 @@ app.post('/api/data', (req, res) => {
   });
 });
 
-
-// // Endpoint POST dari ESP32//
-// app.post('/api/data', (req, res) => {
-//   const { temperature, humidity } = req.body;
-
-//   // Validasi input data
-//   if (temperature == null || humidity == null) {
-//     return res.status(400).json({ message: '❌ Data tidak lengkap' });
-//   }
-
-//   // // Validasi tipe data (optional, tergantung pada kebutuhan)
-//   // if (typeof temperature !== 'number' || typeof humidity !== 'number') {
-//   //   return res.status(400).json({ message: '❌ Data harus berupa angka' });
-//   // }
-
-//   const query = 'INSERT INTO sensor_data (temperature, humidity) VALUES (?, ?)';
-
-//   // Gunakan pool untuk query
-//   pool.query(query, [temperature, humidity], (err, result) => {
-//     if (err) {
-//       console.error('❌ Gagal menyimpan data:', err.message);
-//       return res.status(500).json({ message: '❌ Error pada database' });
-//     }
-
-//     res.status(201).json({
-//       message: '✅ Data berhasil disimpan',
-//       id: result.insertId
-//     });
-//   });
-// });
-
-
-//enpoint get
-
 app.get('/api/data', (req, res) => {
-    db.query('SELECT * FROM sensor_data ORDER BY created_at DESC LIMIT 20', (err, results) => {
-      if (err) {
-        return res.status(500).json({ message: '❌ Error mengambil data' });
-      }
-      res.status(200).json(results);
-    });
+  db.query('SELECT * FROM sensor_data ORDER BY created_at DESC LIMIT 20', (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: '❌ Error mengambil data' });
+    }
+    res.status(200).json(results);
   });
+});
   
- // Halaman grafik
+// Halaman grafik
 app.get('/grafik', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'grafik.html'));
-  });
+  res.sendFile(path.join(__dirname, 'public', 'grafik.html'));
+});
   
-  // Halaman tabel
-  app.get('/tabel', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'tabel.html'));
-  });
+// Halaman tabel
+app.get('/tabel', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tabel.html'));
+});
   
-    // Halaman dashboard
-    app.get('/dashboard', (req, res) => {
-      res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-    });
+// Halaman dashboard
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
     
 // Jalankan server
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
 });
-
