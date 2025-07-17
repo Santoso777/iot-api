@@ -83,7 +83,7 @@ app.post('/api/data', (req, res) => {
     }
 
     res.status(201).json({
-      message: '✅ Data berhasil disimpan',
+      message: 'Data berhasil disimpan',
       id: result.insertId
     });
   });
@@ -92,7 +92,7 @@ app.post('/api/data', (req, res) => {
 app.get('/api/data', (req, res) => {
   db.query('SELECT * FROM sensor_data ORDER BY created_at DESC LIMIT 20', (err, results) => {
     if (err) {
-      return res.status(500).json({ message: '❌ Error mengambil data' });
+      return res.status(500).json({ message: 'Error mengambil data' });
     }
     res.status(200).json(results);
   });
@@ -115,5 +115,5 @@ app.get('/dashboard', (req, res) => {
     
 // Jalankan server
 app.listen(PORT, () => {
-  console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+  console.log(`Server berjalan di http://localhost:${PORT}`);
 });
